@@ -21,6 +21,8 @@ get_argo_link:
 
 ## Demo
 
+[🎥 Демо ArgoCD UI](https://raw.githubusercontent.com/sarco3t/AsciiArtify/main/demo/poc.mp4)
+
 <video controls width="500">
   <source src="https://raw.githubusercontent.com/sarco3t/AsciiArtify/main/demo/poc.mp4" type="video/mp4">
 </video>
