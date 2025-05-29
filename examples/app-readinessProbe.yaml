@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: go-app-pod
+  labels:
+    app: go-app
+spec:
+  containers:
+    - name: go-app-container
+      image: your-golang-app-image:latest
+      ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /readyz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 5
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3

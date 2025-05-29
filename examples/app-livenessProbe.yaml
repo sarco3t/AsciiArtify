@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-golang-app
+spec:
+  containers:
+    - name: golang-app-container
+      image: your-golang-app-image:latest
+      ports:
+        - containerPort: 8080 # Ensure this matches the probe port
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3

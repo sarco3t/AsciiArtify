@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: golang-app-pod
+  labels:
+    app: golang
+spec:
+  containers:
+    - name: golang-app-container
+      image: golang:latest
+      ports:
+        - name: http
+          containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /livez
+          port: http
+        initialDelaySeconds: 15
+        periodSeconds: 20
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /readyz
+          port: http
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        failureThreshold: 3
+      volumeMounts:
+        - name: app-data
+          mountPath: /data
+  volumes:
+    - name: app-data
+      hostPath:
+        path: /var/lib/app
+        type: DirectoryOrCreate

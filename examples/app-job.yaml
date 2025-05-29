@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-with-volumes-no-backoff-no-restart
+spec:
+  # No backoff: the Job will be marked as failed after the first pod     failure
+  backoffLimit: 0
+  template:
+    spec:
+      # No restart: if the container fails, the Pod will be marked as    failed
+      # and will not be restarted.
+      restartPolicy: Never
+      containers:
+        - name: main-task
+          image: busybox # Replace with your desired image
+          command: ["/bin/sh", "-c"] # Replace with your desired command
+          args:
+            - |
+              echo "Starting job task..."                                     
+              echo "Data in volume before writing:"                           
+              ls -l /mnt/mydata || echo "Volume empty or not found"           
+              echo "Writing to volume..."                                     
+              date > /mnt/mydata/timestamp.txt                                
+              echo "Data in volume after writing:"                            
+              ls -l /mnt/mydata                                               
+              cat /mnt/mydata/timestamp.txt                                   
+              echo "Job task finished."
+          volumeMounts:
+            - name: my-data-volume
+              mountPath: /mnt/mydata
+      volumes:
+        - name: my-data-volume
+          emptyDir: {} # Using emptyDir as an example. Replace with your    desired volume type (e.g., persistentVolumeClaim, configMap, etc.)
